@@ -2,6 +2,7 @@ package keyone.keytwo.a1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +19,24 @@ public class A2 extends AppCompatActivity {
         } else {
             instanceState = "Повторный запуск!";
         }
-        Log.d(instanceState + " - onCreate()");
+        getIntent().getStringExtra("message");
+        Log.d("intent",getIntent().getStringExtra("message"));
+        ((TextView)findViewById(R.id.textView)).setText(getIntent().getStringExtra("message"));
+
+
+        (findViewById(R.id.button)).setOnClickListener(v -> {
+            Intent intentAnswer = new Intent();
+            intentAnswer.putExtra("answer"," Andrej");
+            setResult(A1.requestCodeLogin,intentAnswer);
+            finish();
+        });
+
+        (findViewById(R.id.buttonBD)).setOnClickListener(v -> {
+            Intent intentAnswer = new Intent();
+            intentAnswer.putExtra("answer"," 01.01.2000");
+            setResult(A1.requestCodeBD,intentAnswer);
+            finish();
+        });
     }
 
 

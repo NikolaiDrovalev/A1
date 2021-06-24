@@ -1,10 +1,15 @@
 package keyone.keytwo.a1;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class A1 extends AppCompatActivity {
@@ -21,10 +26,38 @@ public class A1 extends AppCompatActivity {
         }
         Log.d(instanceState + " - onCreate()");
         (findViewById(R.id.button)).setOnClickListener(v -> {
-            this.startActivity((new Intent(this,A2.class)));
+            Intent intent = new Intent(this,A2.class);
+            intent.putExtra("message","Привет, А2");
+            //this.startActivity(intent);
+            this.startActivityForResult(intent,requestCodeLogin);
         });
-    }
 
+        (findViewById(R.id.buttonBD)).setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivity(intent);
+        });
+
+        Log.d("mime",MimeTypeMap.getSingleton().getMimeTypeFromExtension("png"));
+        Log.d("mime",MimeTypeMap.getSingleton().getMimeTypeFromExtension("jpg"));
+        Log.d("mime",MimeTypeMap.getSingleton().getMimeTypeFromExtension("mp3"));
+        Log.d("mime",MimeTypeMap.getSingleton().getMimeTypeFromExtension("avi"));
+        Log.d("mime",MimeTypeMap.getSingleton().getMimeTypeFromExtension("tif"));
+        Log.d("mime",MimeTypeMap.getSingleton().getMimeTypeFromExtension("svg"));
+        Log.d("mime",MimeTypeMap.getSingleton().getMimeTypeFromExtension("zip"));
+    }
+    public static final int requestCodeLogin = 99;//запрос сделать изменить логин
+    public static final int requestCodeBD = 98;//запрос сделать изменить дату рождкения
+
+    @Override
+    protected void onActivityResult(int requestCodeAnswer, int resultCode, Intent data) {
+        super.onActivityResult(requestCodeLogin, resultCode, data);
+        if(requestCodeAnswer==requestCodeLogin){
+            ((TextView)findViewById(R.id.textView)).setText("логин изменен на"+data.getStringExtra("answer"));
+        }else if(requestCodeAnswer==requestCodeBD){
+            ((TextView)findViewById(R.id.textView)).setText("Дата рождения изменена на"+data.getStringExtra("answer"));
+        }
+
+    }
 
     @Override
     protected void onStart() {
